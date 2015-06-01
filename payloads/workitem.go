@@ -5,7 +5,7 @@ func NewWorkItem() *workItem {
 }
 
 type workItem struct {
-	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount"`
+	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount,omitempty"`
 	DestinationQueue             *key                          `xml:"destinationQueue,omitempty" json:"destinationQueue"`
 	DocumentAttachmentCount      *int                          `xml:"documentAttachmentCount" json:"documentAttachmentCount"`
 	DocumentAttachmentReferences *documentAttachmentReferences `xml:"documentAttachmentReferences" json:"documentAttachmentReferences"`

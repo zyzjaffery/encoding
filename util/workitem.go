@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"github.com/xtraclabs/encoding/payloads"
@@ -239,6 +240,10 @@ var workitemPayload = `
  </ns:workItem>
 `
 
+var workitemJson = `
+{"destinationQueue":null,"documentAttachmentCount":2,"documentAttachmentReferences":{"documentAttachmentReference":[{"documentId":"1","description":"doc 1 desc","connection":"doc 1 connection"},{"documentId":"2","description":"doc 2 desc","connection":"doc 2 connection"}]},"jeopardyFields":{"jeopardyField":null},"milestones":{"milestone":null},"fields":{"field":null},"itemType":"","lockState":{"lockAcquired":false,"lockTime":"","lockOwnerInfo":"","lockOwnerOperatorId":"","lockOwnerOperatorName":""},"globalFieldLockState":{"lockAcquired":false,"lockTime":"","lockOwnerInfo":"","lockOwnerOperatorId":"","lockOwnerOperatorName":""},"noteCount":0,"linkCount":0,"parties":{"party":null},"status":"","statusType":"","subtype":"","workItemNumber":"","copiedWorkItemNumber":"","workItemState":{"createOperator":"","lastUpdateOperator":"","archiveStatus":"","createDate":"","currentNode":"","currentQueue":"","currentStatusDate":"","ibrStatus":"","lastEventDate":"","locked":false,"remoteWorkItemNumber":"","rule351":false,"sourceLinkedItem":"","splitStatus":"","suspendStatus":"","totalMinutesContributingSuspended":0,"totalMinutesNonContributingSuspended":0,"totalTimesContributingSuspended":{"suspensionTimeLimit":0},"totalTimesNonContributingSuspended":{"suspensionTimeLimit":0}},"smartStoreId":"","smartStoreURL":"","hyperlinkSpecifications":{"hyperlinkSpecification":null},"familyId":"","archiveState":"","repositoryDocumentDetails":"","purgeDate":""}
+`
+
 func main() {
 	var workitem = payloads.NewWorkItem()
 	err := xml.Unmarshal([]byte(workitemPayload), workitem)
@@ -258,5 +263,23 @@ func main() {
 	}
 
 	fmt.Println(string(xmlbytes))
+
+	jsonBytes, err := json.Marshal(workitem)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(string(jsonBytes))
+
+	var jsonWorkitem = payloads.NewWorkItem()
+	err = json.Unmarshal([]byte(workitemJson), jsonWorkitem)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Printf("corr count: %v\n", jsonWorkitem.CorrespondenceCount)
+	fmt.Printf("doc attachment count: %v\n", *jsonWorkitem.DocumentAttachmentCount)
+	fmt.Printf("doc attachment 1: %v\n", jsonWorkitem.DocumentAttachmentReferences)
 
 }
