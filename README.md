@@ -7,13 +7,13 @@ unmarshalling schemes.
 
 ### Pointer Fields
 
-The XML Unmarshaller allocates pointer fields to hold potentially optional content.
+The XML Unmarshaller (and the Json Unmarshaller) allocates pointer fields to hold potentially optional content.
 
 For example, if the work item struct looks like
 
 <pre>
 type workItem struct {
-	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount"`
+	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount,omitempty"`
 	DestinationQueue             *key                          `xml:"destinationQueue,omitempty" json:"destinationQueue"`
 	DocumentAttachmentCount      *int                          `xml:"documentAttachmentCount" json:"documentAttachmentCount"`
 	DocumentAttachmentReferences *documentAttachmentReferences `xml:"documentAttachmentReferences" json:"documentAttachmentReferences"`
@@ -43,9 +43,9 @@ And we have this document:
  The unmarshaller will allocate doc attachment count and references fields to hold the document content.
  
  
-### Omitting Fields in XML Output
+### Omitting Fields in XML and JSON Output
 
-Omitting fields works as simple as adding omitempty to the xml tags associated with a field - see the above
+Omitting fields works as simple as adding omitempty to the xml or json tags associated with a field - see the above
 document snippet for an example.
 
 ## Next
