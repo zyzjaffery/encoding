@@ -3,138 +3,260 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"os"
+	"github.com/xtraclabs/encoding/payloads"
 )
 
-type workItem struct {
-	CorrespondenceCount          int                          `xml:"correspondenceCount" json:"correspondenceCount"`
-	DestinationQueue             *key                         `xml:"destinationQueue,omitempty" json:"destinationQueue"`
-	DocumentAttachmentCount      int                          `xml:"documentAttachmentCount" json:"documentAttachmentCount"`
-	DocumentAttachmentReferences documentAttachmentReferences `xml:"documentAttachmentReferences" json:"documentAttachmentReferences"`
-	JeopardyFields               jeopardyFieldss              `xml:"jeopardyFields" json:"jeopardyFields"`
-	Milestones                   milestoness                  `xml:"milestones" json:"milestones"`
-	Fields                       fields                       `xml:"fields" json:"fields"`
-	ItemType                     string                       `xml:"itemType" json:"itemType"`
-	LockState                    lockState                    `xml:"lockState" json:"lockState"`
-	GlobalFieldLockState         lockState                    `xml:"globalFieldLockState" json:"globalFieldLockState"`
-	NoteCount                    int                          `xml:"noteCount" json:"noteCount"`
-	LinkCount                    int                          `xml:"linkCount" json:"linkCount"`
-	Parties                      partys                       `xml:"parties" json:"parties"`
-	Status                       string                       `xml:"status" json:"status"`
-	StatusType                   string                       `xml:"statusType" json:"statusType"`
-	Subtype                      string                       `xml:"subtype" json:"subtype"`
-	WorkItemNumber               string                       `xml:"workItemNumber" json:"workItemNumber"`
-	CopiedWorkItemNumber         string                       `xml:"copiedWorkItemNumber" json:"copiedWorkItemNumber"`
-	WorkItemState                workItemState                `xml:"workItemState" json:"workItemState"`
-	SmartStoreId                 string                       `xml:"smartStoreId" json:"smartStoreId"`
-	SmartStoreURL                string                       `xml:"smartStoreURL" json:"smartStoreURL"`
-	HyperlinkSpecifications      hyperlinkSpecifications      `xml:"hyperlinkSpecifications" json:"hyperlinkSpecifications"`
-	FamilyId                     string                       `xml:"familyId" json:"familyId"`
-	ArchiveState                 string                       `xml:"archiveState" json:"archiveState"`
-	RepositoryDocumentDetails    string                       `xml:"repositoryDocumentDetails" json:"repositoryDocumentDetails"`
-	PurgeDate                    string                       `xml:"purgeDate" json:"purgeDate"`
-}
-type key struct {
-	Id   int64  `xml:"id" json:"id"`
-	Name string `xml:"name" json:"name"`
-}
-type documentAttachmentReferences struct {
-	DocumentAttachmentReferences []documentAttachmentReference `xml:"documentAttachmentReference" json:"documentAttachmentReference"`
-}
-type documentAttachmentReference struct {
-	DocumentId  string `xml:"documentId" json:"documentId"`
-	Description string `xml:"description" json:"description"`
-	Connection  string `xml:"connection" json:"connection"`
-}
-type jeopardyFieldss struct {
-	JeopardyFields []jeopardyField `xml:"jeopardyField" json:"jeopardyField"`
-}
-type jeopardyField struct {
-	JeopardyComponent string `xml:"jeopardyComponent" json:"jeopardyComponent"`
-	TargetDateValueC  string `xml:"targetDateValueC" json:"targetDateValueC"`
-	State             string `xml:"state" json:"state"`
-}
-type milestoness struct {
-	Milestones []milestone `xml:"milestone" json:"milestone"`
-}
-type milestone struct {
-	MilestoneId          int64  `xml:"milestoneId" json:"milestoneId"`
-	AmberThresholdValueC string `xml:"amberThresholdValueC" json:"amberThresholdValueC"`
-	RedThresholdValueC   string `xml:"redThresholdValueC" json:"redThresholdValueC"`
-	TargetDateValueC     string `xml:"targetDateValueC" json:"targetDateValueC"`
-	MilestoneName        string `xml:"milestoneName" json:"milestoneName"`
-	State                string `xml:"state" json:"state"`
-	IsComplete           bool   `xml:"isComplete" json:"isComplete"`
-	DateStart            string `xml:"dateStart" json:"dateStart"`
-	DateComplete         string `xml:"dateComplete" json:"dateComplete"`
-}
-type fields struct {
-	Fields []field `xml:"field" json:"field"`
-}
-type field struct {
-	FieldName string `xml:"fieldName" json:"fieldName"`
-	FieldVal  string `xml:"fieldVal" json:"fieldVal"`
-}
-type lockState struct {
-	LockAcquired          bool   `xml:"lockAcquired" json:"lockAcquired"`
-	LockTime              string `xml:"lockTime" json:"lockTime"`
-	LockOwnerInfo         string `xml:"lockOwnerInfo" json:"lockOwnerInfo"`
-	LockOwnerOperatorId   string `xml:"lockOwnerOperatorId" json:"lockOwnerOperatorId"`
-	LockOwnerOperatorName string `xml:"lockOwnerOperatorName" json:"lockOwnerOperatorName"`
-}
-type partys struct {
-	Partys []party `xml:"party" json:"party"`
-}
-type party struct {
-	PartyType string `xml:"partyType" json:"partyType"`
-	Fields    fields `xml:"fields" json:"fields"`
-}
-type workItemState struct {
-	CreateOperator                       string                   `xml:"createOperator" json:"createOperator"`
-	LastUpdateOperator                   string                   `xml:"lastUpdateOperator" json:"lastUpdateOperator"`
-	ArchiveStatus                        string                   `xml:"archiveStatus" json:"archiveStatus"`
-	CreateDate                           string                   `xml:"createDate" json:"createDate"`
-	CurrentNode                          string                   `xml:"currentNode" json:"currentNode"`
-	CurrentQueue                         string                   `xml:"currentQueue" json:"currentQueue"`
-	CurrentStatusDate                    string                   `xml:"currentStatusDate" json:"currentStatusDate"`
-	IbrStatus                            string                   `xml:"ibrStatus" json:"ibrStatus"`
-	LastEventDate                        string                   `xml:"lastEventDate" json:"lastEventDate"`
-	Locked                               bool                     `xml:"locked" json:"locked"`
-	RemoteWorkItemNumber                 string                   `xml:"remoteWorkItemNumber" json:"remoteWorkItemNumber"`
-	Rule351                              bool                     `xml:"rule351" json:"rule351"`
-	SourceLinkedItem                     string                   `xml:"sourceLinkedItem" json:"sourceLinkedItem"`
-	SplitStatus                          string                   `xml:"splitStatus" json:"splitStatus"`
-	SuspendStatus                        string                   `xml:"suspendStatus" json:"suspendStatus"`
-	TotalMinutesContributingSuspended    int                      `xml:"totalMinutesContributingSuspended" json:"totalMinutesContributingSuspended"`
-	TotalMinutesNonContributingSuspended int                      `xml:"totalMinutesNonContributingSuspended" json:"totalMinutesNonContributingSuspended"`
-	TotalTimesContributingSuspended      suspensionTimeLimitValue `xml:"totalTimesContributingSuspended" json:"totalTimesContributingSuspended"`
-	TotalTimesNonContributingSuspended   suspensionTimeLimitValue `xml:"totalTimesNonContributingSuspended" json:"totalTimesNonContributingSuspended"`
-}
-type suspensionTimeLimitValue struct {
-	SuspensionTimeLimit int `xml:"suspensionTimeLimit" json:"suspensionTimeLimit"`
-}
-type hyperlinkSpecifications struct {
-	HyperlinkSpecifications []hyperlinkSpecification `xml:"hyperlinkSpecification" json:"hyperlinkSpecification"`
-}
-type hyperlinkSpecification struct {
-	FieldName       string          `xml:"fieldName" json:"fieldName"`
-	Name            string          `xml:"name" json:"name"`
-	ResolvedURLData string          `xml:"resolvedURLData" json:"resolvedURLData"`
-	WindowName      string          `xml:"windowName" json:"windowName"`
-	HyperlinkFields hyperlinkFields `xml:"hyperlinkFields" json:"hyperlinkFields"`
-}
-type hyperlinkFields struct {
-	HyperlinkFields []string `xml:"hyperlinkField" json:"hyperlinkField"`
-}
+var wireCreate = `
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://xmlns.fmr.com/systems/dev/xtrac/2004/06/" xmlns:ser="http://xmlns.fmr.com/common/headers/2005/12/ServiceProcessingDirectives" xmlns:ser1="http://xmlns.fmr.com/common/headers/2005/12/ServiceCallContext" xmlns:typ="http://xmlns.fmr.com/systems/dev/xtrac/2004/06/types">
+   <soapenv:Header>
+   </soapenv:Header>
+   <soapenv:Body>
+      <ns:create>
+         <ns:workItem>
+            <!--Optional:-->
+            <typ:correspondenceCount>?</typ:correspondenceCount>
+            <!--Optional:-->
+            <typ:destinationQueue>
+               <!--Optional:-->
+               <typ:id>?</typ:id>
+               <!--Optional:-->
+               <typ:name>?</typ:name>
+            </typ:destinationQueue>
+            <!--Optional:-->
+            <typ:documentAttachmentCount>?</typ:documentAttachmentCount>
+            <!--Optional:-->
+            <typ:documentAttachmentReferences>
+               <!--Zero or more repetitions:-->
+               <typ:documentAttachmentReference>
+                  <typ:documentId>?</typ:documentId>
+                  <!--Optional:-->
+                  <typ:description>?</typ:description>
+                  <typ:connection>?</typ:connection>
+               </typ:documentAttachmentReference>
+            </typ:documentAttachmentReferences>
+            <!--Optional:-->
+            <typ:jeopardyFields>
+               <!--Zero or more repetitions:-->
+               <typ:jeopardyField>
+                  <typ:jeopardyComponent>?</typ:jeopardyComponent>
+                  <typ:targetDateValueC>?</typ:targetDateValueC>
+                  <!--Optional:-->
+                  <typ:state>?</typ:state>
+               </typ:jeopardyField>
+            </typ:jeopardyFields>
+            <!--Optional:-->
+            <typ:milestones>
+               <!--Zero or more repetitions:-->
+               <typ:milestone>
+                  <typ:milestoneId>?</typ:milestoneId>
+                  <typ:amberThresholdValueC>?</typ:amberThresholdValueC>
+                  <typ:redThresholdValueC>?</typ:redThresholdValueC>
+                  <typ:targetDateValueC>?</typ:targetDateValueC>
+                  <typ:milestoneName>?</typ:milestoneName>
+                  <typ:state>?</typ:state>
+                  <typ:isComplete>?</typ:isComplete>
+                  <typ:dateStart>?</typ:dateStart>
+                  <typ:dateComplete>?</typ:dateComplete>
+               </typ:milestone>
+            </typ:milestones>
+            <!--Optional:-->
+            <typ:fields>
+               <!--Zero or more repetitions:-->
+               <typ:field>
+                  <typ:fieldName>?</typ:fieldName>
+                  <!--Optional:-->
+                  <typ:fieldVal>?</typ:fieldVal>
+               </typ:field>
+            </typ:fields>
+            <!--Optional:-->
+            <typ:itemType>?</typ:itemType>
+            <!--Optional:-->
+            <typ:lockState>
+               <typ:lockAcquired>?</typ:lockAcquired>
+               <typ:lockTime>?</typ:lockTime>
+               <typ:lockOwnerInfo>?</typ:lockOwnerInfo>
+               <!--Optional:-->
+               <typ:lockOwnerOperatorId>?</typ:lockOwnerOperatorId>
+               <typ:lockOwnerOperatorName>?</typ:lockOwnerOperatorName>
+            </typ:lockState>
+            <!--Optional:-->
+            <typ:globalFieldLockState>
+               <typ:lockAcquired>?</typ:lockAcquired>
+               <typ:lockTime>?</typ:lockTime>
+               <typ:lockOwnerInfo>?</typ:lockOwnerInfo>
+               <!--Optional:-->
+               <typ:lockOwnerOperatorId>?</typ:lockOwnerOperatorId>
+               <typ:lockOwnerOperatorName>?</typ:lockOwnerOperatorName>
+            </typ:globalFieldLockState>
+            <!--Optional:-->
+            <typ:noteCount>?</typ:noteCount>
+            <!--Optional:-->
+            <typ:linkCount>?</typ:linkCount>
+            <typ:parties>
+               <!--Zero or more repetitions:-->
+               <typ:party>
+                  <typ:partyType>?</typ:partyType>
+                  <typ:fields>
+                     <!--Zero or more repetitions:-->
+                     <typ:field>
+                        <typ:fieldName>?</typ:fieldName>
+                        <!--Optional:-->
+                        <typ:fieldVal>?</typ:fieldVal>
+                     </typ:field>
+                  </typ:fields>
+               </typ:party>
+            </typ:parties>
+            <!--Optional:-->
+            <typ:status>?</typ:status>
+            <!--Optional:-->
+            <typ:statusType>?</typ:statusType>
+            <!--Optional:-->
+            <typ:subtype>?</typ:subtype>
+            <!--Optional:-->
+            <typ:workItemNumber>?</typ:workItemNumber>
+            <!--Optional:-->
+            <typ:copiedWorkItemNumber>?</typ:copiedWorkItemNumber>
+            <!--Optional:-->
+            <typ:workItemState>
+               <!--Optional:-->
+               <typ:createOperator>?</typ:createOperator>
+               <!--Optional:-->
+               <typ:lastUpdateOperator>?</typ:lastUpdateOperator>
+               <!--Optional:-->
+               <typ:archiveStatus>?</typ:archiveStatus>
+               <!--Optional:-->
+               <typ:createDate>?</typ:createDate>
+               <!--Optional:-->
+               <typ:currentNode>?</typ:currentNode>
+               <!--Optional:-->
+               <typ:currentQueue>?</typ:currentQueue>
+               <!--Optional:-->
+               <typ:currentStatusDate>?</typ:currentStatusDate>
+               <!--Optional:-->
+               <typ:ibrStatus>?</typ:ibrStatus>
+               <!--Optional:-->
+               <typ:lastEventDate>?</typ:lastEventDate>
+               <!--Optional:-->
+               <typ:locked>?</typ:locked>
+               <!--Optional:-->
+               <typ:remoteWorkItemNumber>?</typ:remoteWorkItemNumber>
+               <!--Optional:-->
+               <typ:rule351>?</typ:rule351>
+               <!--Optional:-->
+               <typ:sourceLinkedItem>?</typ:sourceLinkedItem>
+               <!--Optional:-->
+               <typ:splitStatus>?</typ:splitStatus>
+               <!--Optional:-->
+               <typ:suspendStatus>?</typ:suspendStatus>
+               <!--Optional:-->
+               <typ:totalMinutesContributingSuspended>?</typ:totalMinutesContributingSuspended>
+               <!--Optional:-->
+               <typ:totalMinutesNonContributingSuspended>?</typ:totalMinutesNonContributingSuspended>
+               <!--Optional:-->
+               <typ:totalTimesContributingSuspended>
+                  <typ:suspensionTimeLimit>?</typ:suspensionTimeLimit>
+               </typ:totalTimesContributingSuspended>
+               <!--Optional:-->
+               <typ:totalTimesNonContributingSuspended>
+                  <typ:suspensionTimeLimit>?</typ:suspensionTimeLimit>
+               </typ:totalTimesNonContributingSuspended>
+            </typ:workItemState>
+            <!--Optional:-->
+            <typ:smartStoreId>?</typ:smartStoreId>
+            <!--Optional:-->
+            <typ:smartStoreURL>?</typ:smartStoreURL>
+            <!--Optional:-->
+            <typ:hyperlinkSpecifications>
+               <!--Zero or more repetitions:-->
+               <typ:hyperlinkSpecification>
+                  <typ:fieldName>?</typ:fieldName>
+                  <typ:name>?</typ:name>
+                  <!--Optional:-->
+                  <typ:resolvedURLData>?</typ:resolvedURLData>
+                  <!--Optional:-->
+                  <typ:windowName>?</typ:windowName>
+                  <!--Optional:-->
+                  <typ:hyperlinkFields>
+                     <!--Zero or more repetitions:-->
+                     <typ:hyperlinkField>?</typ:hyperlinkField>
+                  </typ:hyperlinkFields>
+               </typ:hyperlinkSpecification>
+            </typ:hyperlinkSpecifications>
+            <!--Optional:-->
+            <typ:familyId>?</typ:familyId>
+            <!--Optional:-->
+            <typ:archiveState>?</typ:archiveState>
+            <!--Optional:-->
+            <typ:repositoryDocumentDetails>?</typ:repositoryDocumentDetails>
+            <!--Optional:-->
+            <typ:purgeDate>?</typ:purgeDate>
+         </ns:workItem>
+         <ns:evaluateRule>?</ns:evaluateRule>
+         <ns:note>
+            <!--Optional:-->
+            <typ:controlNumber>?</typ:controlNumber>
+            <!--Optional:-->
+            <typ:dateTime>?</typ:dateTime>
+            <!--Optional:-->
+            <typ:itemSubtype>?</typ:itemSubtype>
+            <!--Optional:-->
+            <typ:itemType>?</typ:itemType>
+            <!--Optional:-->
+            <typ:memo>?</typ:memo>
+            <!--Optional:-->
+            <typ:noteName>?</typ:noteName>
+            <!--Optional:-->
+            <typ:noteText>?</typ:noteText>
+            <!--Optional:-->
+            <typ:operatorId>?</typ:operatorId>
+            <!--Optional:-->
+            <typ:workItemNumber>?</typ:workItemNumber>
+         </ns:note>
+      </ns:create>
+   </soapenv:Body>
+</soapenv:Envelope>
+`
+
+var workitemPayload = `
+ <ns:workItem>
+   <typ:documentAttachmentCount>2</typ:documentAttachmentCount>
+   <!--Optional:-->
+   <typ:documentAttachmentReferences>
+      <!--Zero or more repetitions:-->
+      <typ:documentAttachmentReference>
+         <typ:documentId>1</typ:documentId>
+         <!--Optional:-->
+         <typ:description>doc 1 desc</typ:description>
+         <typ:connection>doc 1 connection</typ:connection>
+      </typ:documentAttachmentReference>
+      <typ:documentAttachmentReference>
+         <typ:documentId>2</typ:documentId>
+         <!--Optional:-->
+         <typ:description>doc 2 desc</typ:description>
+         <typ:connection>doc 2 connection</typ:connection>
+      </typ:documentAttachmentReference>
+   </typ:documentAttachmentReferences>
+ </ns:workItem>
+`
 
 func main() {
-	witem := workItem{DestinationQueue: nil}
-	witem.CorrespondenceCount = 1
-	witemBytes, err := xml.Marshal(witem)
+	var workitem = payloads.NewWorkItem()
+	err := xml.Unmarshal([]byte(workitemPayload), workitem)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, err.Error())
+		fmt.Println(err.Error())
+		return
 	}
 
-	fmt.Println(string(witemBytes))
+	fmt.Printf("corr count: %v\n", workitem.CorrespondenceCount)
+	fmt.Printf("doc attachment count: %v\n", *workitem.DocumentAttachmentCount)
+	fmt.Printf("doc attachments: %v\n", workitem.DocumentAttachmentReferences)
+
+	xmlbytes, err := xml.Marshal(workitem)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(string(xmlbytes))
 
 }
