@@ -245,8 +245,10 @@ var workitemJson = `
 `
 
 func main() {
-	var workitem = payloads.NewWorkItem()
-	err := xml.Unmarshal([]byte(workitemPayload), workitem)
+	var workitem payloads.WorkItem
+	var jsonWorkitem payloads.WorkItem
+
+	err := xml.Unmarshal([]byte(workitemPayload), &workitem)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -271,8 +273,7 @@ func main() {
 
 	fmt.Println(string(jsonBytes))
 
-	var jsonWorkitem = payloads.NewWorkItem()
-	err = json.Unmarshal([]byte(workitemJson), jsonWorkitem)
+	err = json.Unmarshal([]byte(workitemJson), &jsonWorkitem)
 	if err != nil {
 		fmt.Println(err.Error())
 		return

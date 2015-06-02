@@ -48,7 +48,4 @@ And we have this document:
 Omitting fields works as simple as adding omitempty to the xml or json tags associated with a field - see the above
 document snippet for an example.
 
-## Next
 
-* Rename soap parts to where we can reuse the domain specific internal items in the context of multiple soap
-transactions

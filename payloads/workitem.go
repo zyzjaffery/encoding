@@ -1,10 +1,6 @@
 package payloads
 
-func NewWorkItem() *workItem {
-	return new(workItem)
-}
-
-type workItem struct {
+type WorkItem struct {
 	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount,omitempty"`
 	DestinationQueue             *key                          `xml:"destinationQueue,omitempty" json:"destinationQueue"`
 	DocumentAttachmentCount      *int                          `xml:"documentAttachmentCount" json:"documentAttachmentCount"`
