@@ -48,4 +48,8 @@ And we have this document:
 Omitting fields works as simple as adding omitempty to the xml or json tags associated with a field - see the above
 document snippet for an example.
 
+## Next Steps
 
+* Benchmarks comparing XML marshalling vs stream XML parsing.
+* Benchmark to show overhead of buffering in wrappers - are there other ways
+around this?
