@@ -48,3 +48,16 @@ func BenchmarkCreateParse200Attachments(b *testing.B) {
 
 	}
 }
+
+func TestCreateParseStream(t *testing.T) {
+	createEnv, err := streamParseCreateWorkItem(payload2Attachments)
+	if err != nil {
+		t.Fatal("error parsing document")
+	}
+
+	witem := createEnv.CreateBody.Create.WorkItem
+	if *witem.CorrespondenceCount != 10 {
+		t.Fail()
+	}
+
+}
