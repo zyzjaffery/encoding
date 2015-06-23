@@ -26,3 +26,7 @@ func parseCreateWorkItem(payload string) (*CreateEnvelope, error) {
 
 	return &createEnv, nil
 }
+
+func streamParseCreateWorkItem(payload string) (*CreateEnvelope, error) {
+	return nil, nil
+}
