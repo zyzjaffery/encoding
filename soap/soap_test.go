@@ -5,7 +5,7 @@ import (
 )
 
 func TestParsing(t *testing.T) {
-	createEnv, err := parseCreateWorkItem(payload2Attachments)
+	createEnv, err := parseCreateWorkItem(payload20Attachments)
 	if err != nil {
 		t.Fatal("error parsing document")
 	}
@@ -15,6 +15,10 @@ func TestParsing(t *testing.T) {
 		t.Fail()
 	}
 	if *witem.DocumentAttachmentCount != 2 {
+		t.Fail()
+	}
+
+	if len(witem.DocumentAttachmentReferences.DocumentAttachmentReferences) != 20 {
 		t.Fail()
 	}
 }
@@ -50,7 +54,7 @@ func BenchmarkCreateParse200Attachments(b *testing.B) {
 }
 
 func TestCreateParseStream(t *testing.T) {
-	createEnv, err := streamParseCreateWorkItem(payload2Attachments)
+	createEnv, err := streamParseCreateWorkItem(payload20Attachments)
 	if err != nil {
 		t.Fatal("error parsing document")
 	}
@@ -60,4 +64,43 @@ func TestCreateParseStream(t *testing.T) {
 		t.Fail()
 	}
 
+	if *witem.DocumentAttachmentCount != 2 {
+		t.Fail()
+	}
+
+	if len(witem.DocumentAttachmentReferences.DocumentAttachmentReferences) != 20 {
+		t.Log("count was ", len(witem.DocumentAttachmentReferences.DocumentAttachmentReferences))
+		t.Fail()
+	}
+
+}
+
+func BenchmarkCreateStreamingParse2Attachments(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_, err := streamParseCreateWorkItem(payload2Attachments)
+		if err != nil {
+			panic(err)
+		}
+
+	}
+}
+
+func BenchmarkCreateStreamingParse20Attachments(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_, err := streamParseCreateWorkItem(payload20Attachments)
+		if err != nil {
+			panic(err)
+		}
+
+	}
+}
+
+func BenchmarkCreateStreamingParse200Attachments(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_, err := streamParseCreateWorkItem(payload200Attachments)
+		if err != nil {
+			panic(err)
+		}
+
+	}
 }

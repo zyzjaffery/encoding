@@ -2,7 +2,6 @@ package soap
 
 import (
 	"encoding/xml"
-	"fmt"
 	"github.com/xtraclabs/encoding/payloads"
 	"strconv"
 	"strings"
@@ -35,6 +34,8 @@ func streamParseCreateWorkItem(payload string) (*CreateEnvelope, error) {
 	decoder := xml.NewDecoder(reader)
 
 	var createEnv CreateEnvelope
+	var docRef payloads.DocumentAttachmentReference
+
 	var currentElement string
 	for {
 		t, _ := decoder.Token()
@@ -54,23 +55,39 @@ func streamParseCreateWorkItem(payload string) (*CreateEnvelope, error) {
 				createEnv.CreateBody.Create = new(Create)
 			case "workItem":
 				createEnv.CreateBody.Create.WorkItem = new(payloads.WorkItem)
-
+			case "documentAttachmentReferences":
+				createEnv.CreateBody.Create.WorkItem.DocumentAttachmentReferences = new(payloads.DocumentAttachmentReferences)
 			}
 
-			//fmt.Println("StartElement")
-			//fmt.Printf("\tElement: %s\n", currentElement)
+			//			fmt.Println("StartElement")
+			//			fmt.Printf("\tElement: %s\n", currentElement)
 
 		case xml.EndElement:
-			//fmt.Println("end element")
+
+			endElement := t.(xml.EndElement).Name.Local
+			//			fmt.Println("end element: ", endElement)
+			if endElement == "documentAttachmentReference" {
+				createEnv.CreateBody.Create.WorkItem.DocumentAttachmentReferences.DocumentAttachmentReferences =
+					append(createEnv.CreateBody.Create.WorkItem.DocumentAttachmentReferences.DocumentAttachmentReferences, docRef)
+			}
 			currentElement = ""
 
 		case xml.CharData:
 			//fmt.Println("char data, current element is ", currentElement)
 			switch currentElement {
 			case "correspondenceCount":
-				fmt.Println("handling corr count")
 				cc, _ := strconv.Atoi(string(t.(xml.CharData)))
 				createEnv.CreateBody.Create.WorkItem.CorrespondenceCount = &cc
+			case "documentAttachmentCount":
+				dc, _ := strconv.Atoi(string(t.(xml.CharData)))
+				createEnv.CreateBody.Create.WorkItem.DocumentAttachmentCount = &dc
+			case "documentId":
+				docRef.DocumentId = string(t.(xml.CharData))
+			case "description":
+				docRef.Description = string(t.(xml.CharData))
+			case "connection":
+				docRef.Connection = string(t.(xml.CharData))
+
 			}
 
 		}

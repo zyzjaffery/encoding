@@ -4,7 +4,7 @@ type WorkItem struct {
 	CorrespondenceCount          *int                          `xml:"correspondenceCount,omitempty" json:"correspondenceCount,omitempty"`
 	DestinationQueue             *key                          `xml:"destinationQueue,omitempty" json:"destinationQueue"`
 	DocumentAttachmentCount      *int                          `xml:"documentAttachmentCount" json:"documentAttachmentCount"`
-	DocumentAttachmentReferences *documentAttachmentReferences `xml:"documentAttachmentReferences" json:"documentAttachmentReferences"`
+	DocumentAttachmentReferences *DocumentAttachmentReferences `xml:"documentAttachmentReferences" json:"documentAttachmentReferences"`
 	JeopardyFields               jeopardyFieldss               `xml:"jeopardyFields" json:"jeopardyFields"`
 	Milestones                   milestoness                   `xml:"milestones" json:"milestones"`
 	Fields                       fields                        `xml:"fields" json:"fields"`
@@ -32,10 +32,10 @@ type key struct {
 	Id   int64  `xml:"id" json:"id"`
 	Name string `xml:"name" json:"name"`
 }
-type documentAttachmentReferences struct {
-	DocumentAttachmentReferences []documentAttachmentReference `xml:"documentAttachmentReference" json:"documentAttachmentReference"`
+type DocumentAttachmentReferences struct {
+	DocumentAttachmentReferences []DocumentAttachmentReference `xml:"documentAttachmentReference" json:"documentAttachmentReference"`
 }
-type documentAttachmentReference struct {
+type DocumentAttachmentReference struct {
 	DocumentId  string `xml:"documentId" json:"documentId"`
 	Description string `xml:"description" json:"description"`
 	Connection  string `xml:"connection" json:"connection"`
