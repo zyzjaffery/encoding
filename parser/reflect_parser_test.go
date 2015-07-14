@@ -2,8 +2,8 @@ package parser
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/xtraclabs/xtrac-api-poc/types/b2b/v1/createWorkItem"
 	"github.com/yaozong/encoding/sample"
+	"github.com/yaozong/encoding/types"
 	"testing"
 )
 
@@ -19,12 +19,12 @@ func TestReflectParsing(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		soapEnv, err := reflectParseB2bCreateWorkItem(testCase.samplePayload)
+		soapEnv, err := ReflectParseB2bCreateWorkItem(testCase.samplePayload)
 		assert.Nil(t, err)
 
 		req, err := soapEnv.Body.GetPayload()
 		assert.Nil(t, err)
-		assert.IsType(t, new(createWorkItem.CreateWorkItem), req)
+		assert.IsType(t, new(types.CreateWorkItem), req)
 
 		assert.Equal(t, testCase.partyAmount, len(*soapEnv.Body.CreateWorkItem.Parties.Partys))
 	}

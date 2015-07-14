@@ -7,7 +7,7 @@ import (
 
 func BenchmarkReflectParse2Parties(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, err := reflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith2Parties)
+		_, err := ReflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith2Parties)
 		if err != nil {
 			panic(err)
 		}
@@ -16,7 +16,7 @@ func BenchmarkReflectParse2Parties(b *testing.B) {
 
 func BenchmarkReflectParse20Parties(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, err := reflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith20Parties)
+		_, err := ReflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith20Parties)
 		if err != nil {
 			panic(err)
 		}
@@ -25,7 +25,7 @@ func BenchmarkReflectParse20Parties(b *testing.B) {
 
 func BenchmarkReflectParse200Parties(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, err := reflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith200Parties)
+		_, err := ReflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith200Parties)
 		if err != nil {
 			panic(err)
 		}
@@ -34,7 +34,7 @@ func BenchmarkReflectParse200Parties(b *testing.B) {
 
 func BenchmarkReflectParse2000Parties(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, err := reflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith2000Parties)
+		_, err := ReflectParseB2bCreateWorkItem(sample.B2bCreateWorkItemWith2000Parties)
 		if err != nil {
 			panic(err)
 		}

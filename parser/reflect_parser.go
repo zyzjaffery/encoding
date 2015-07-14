@@ -1,10 +1,11 @@
 package parser
+
 import (
-	"github.com/xtraclabs/xtrac-api-poc/types"
 	"encoding/xml"
+	"github.com/yaozong/encoding/types"
 )
 
-func reflectParseB2bCreateWorkItem(payload string) (*types.SoapEnvelope, error) {
+func ReflectParseB2bCreateWorkItem(payload string) (*types.SoapEnvelope, error) {
 	createEnv := new(types.SoapEnvelope)
 	err := xml.Unmarshal([]byte(payload), createEnv)
 	if err != nil {
