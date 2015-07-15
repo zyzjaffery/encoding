@@ -1,0 +1,79 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/" xmlns="urn:schemas-xtrac-fmr-com:b2b" SOAP:encodingStyle="urn:encodings-xtrac-fmr-com:v2.0">
+	<SOAP:Header>
+		<Cookie>123456789012345678901234567890</Cookie>
+		<Validate>1</Validate>
+	</SOAP:Header>
+	<SOAP:Body>
+		<CreateWorkItem>
+		{{with .Body.CreateWorkItem}}
+		    {{if .CurrentNode}}<CurrentNode>{{.CurrentNode}}</CurrentNode>{{end}}
+		    {{if .ItemType}}<ItemType>{{.ItemType}}</ItemType>{{end}}
+		    {{if .ItemSubtype}}<ItemSubtype>{{.ItemSubtype}}</ItemSubtype>{{end}}
+		    {{if .Description}}<Description>{{.Description}}</Description>{{end}}
+		    {{if .Cause}}<Cause>{{.Cause}}</Cause>{{end}}
+		    {{if .SubCause}}<SubCause>{{.SubCause}}</SubCause>{{end}}
+		    {{if .ProblemInd}}<ProblemInd>{{.ProblemInd}}</ProblemInd>{{end}}
+		    {{if .Priority}}<Priority>{{.Priority}}</Priority>{{end}}
+		    {{if .Status}}<Status>{{.Status}}</Status>{{end}}
+		    {{if .Amount}}<Amount>{{.Amount}}</Amount>{{end}}
+		    {{if .CommType}}<CommType>{{.CommType}}</CommType>{{end}}
+		    {{if .Memo}}<Memo>{{.Memo}}</Memo>{{end}}
+		    {{if .TransferTo}}<TransferTo>{{.TransferTo}}</TransferTo>{{end}}
+		    {{if .EvaluateRuleInd}}<EvaluateRuleInd>{{.EvaluateRuleInd}}</EvaluateRuleInd>{{end}}
+		    {{if .ParentWorkItemNo}}<ParentWorkItemNo>{{.ParentWorkItemNo}}</ParentWorkItemNo>{{end}}
+		    {{if .SplitId}}<SplitId>{{.SplitId}}</SplitId>{{end}}
+		    {{if .ParentSplitStat}}<ParentSplitStat>{{.ParentSplitStat}}</ParentSplitStat>{{end}}
+		    {{if .SplitLevelNumber}}<SplitLevelNumber>{{.SplitLevelNumber}}</SplitLevelNumber>{{end}}
+
+            {{if .DocAttachments}}<DocAttachments>
+                {{range .DocAttachments.DocAttachments}}<DocAttachment>
+                    {{if .DocumentId}}<DocumentId>{{.DocumentId}}</DocumentId>{{end}}
+                    {{if .DocumentDesc}}<DocumentDesc>{{.DocumentDesc}}</DocumentDesc>{{end}}
+                    {{if .SourceSysConnInfo}}<SourceSysConnInfo>{{.SourceSysConnInfo}}</SourceSysConnInfo>{{end}}
+                    {{if .SourceSysVersion}}<SourceSysVersion>{{.SourceSysVersion}}</SourceSysVersion>{{end}}
+                    {{if .SourceSysName}}<SourceSysName>{{.SourceSysName}}</SourceSysName>{{end}}
+                </DocAttachment>{{end}}
+            </DocAttachments>{{end}}
+
+            {{if .ResolutionNote}}<ResolutionNote>{{with .ResolutionNote}}
+                {{if .ControlNo}}<ControlNo>{{.ControlNo}}</ControlNo>{{end}}
+                {{if .Name}}<Name>{{.Name}}</Name>{{end}}
+                {{if .Memo}}<Memo>{{.Memo}}</Memo>{{end}}
+                {{if .Note}}<Note>{{.Note}}</Note>{{end}}
+            {{end}}</ResolutionNote>{{end}}
+
+            {{if .Parties}}<Parties>
+                {{range .Parties.Partys}}<Party {{if .Name}}Name="{{.Name}}"{{end}}>
+                    {{if .AccountNo}}<AccountNo>{{.AccountNo}}</AccountNo>{{end}}
+                    {{if .AccountType}}<AccountType>{{.AccountType}}</AccountType>{{end}}
+                    {{if .Address1}}<Address1>{{.Address1}}</Address1>{{end}}
+                    {{if .Address2}}<Address2>{{.Address2}}</Address2>{{end}}
+                    {{if .Address3}}<Address3>{{.Address3}}</Address3>{{end}}
+                    {{if .Address4}}<Address4>{{.Address4}}</Address4>{{end}}
+                    {{if .Address5}}<Address5>{{.Address5}}</Address5>{{end}}
+                    {{if .Address6}}<Address6>{{.Address6}}</Address6>{{end}}
+                    {{if .City}}<City>{{.City}}</City>{{end}}
+                    {{if .State}}<State>{{.State}}</State>{{end}}
+                    {{if .PostalCode}}<PostalCode>{{.PostalCode}}</PostalCode>{{end}}
+                    {{if .Country}}<Country>{{.Country}}</Country>{{end}}
+                    {{if .Phone}}<Phone>{{.Phone}}</Phone>{{end}}
+                    {{if .Extension}}<Extension>{{.Extension}}</Extension>{{end}}
+                    {{if .PartyId}}<PartyId>{{.PartyId}}</PartyId>{{end}}
+                    {{if .PartyIdType}}<PartyIdType>{{.PartyIdType}}</PartyIdType>{{end}}
+                    {{if .OrgName}}<OrgName>{{.OrgName}}</OrgName>{{end}}
+                    {{if .FirstName}}<FirstName>{{.FirstName}}</FirstName>{{end}}
+                    {{if .MiddleName}}<MiddleName>{{.MiddleName}}</MiddleName>{{end}}
+                    {{if .LastName}}<LastName>{{.LastName}}</LastName>{{end}}
+                    {{if .PlanNo}}<PlanNo>{{.PlanNo}}</PlanNo>{{end}}
+                </Party>{{end}}
+            </Parties>{{end}}
+
+            {{if .TSFs}}<TSFs>
+                {{range .TSFs.TSFs}}
+                    <TSF {{if .Name}}Name="{{.Name}}"{{end}}{{if .Value}}>{{.Value}}{{else}}/>{{end}}</TSF>
+                {{end}}
+            </TSFs>{{end}}
+        {{end}}
+      	</CreateWorkItem>
+   </SOAP:Body>
+</SOAP:Envelope>
